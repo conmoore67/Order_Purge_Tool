@@ -197,7 +197,6 @@ $okButton.Add_Click({
 })
 
 # Show the form as a dialog
-$form.ShowDialog()
 $form.Topmost = $true
 $result = $form.ShowDialog()
 
@@ -294,7 +293,7 @@ $data = Invoke-Sqlcmd -Query $sqlSearchQuery -ServerInstance $serverName -Databa
  
 # Export data to CSV
 $CurrentDate = Get-Date -Format "yyyy-MM-dd"
-$csvFileName = "$CurrentDate $moveNumber.csv"
+$csvFileName = "$databaseName $CurrentDate $moveNumber.csv"
 $localPath = "C:\temp\$csvFileName"
 $data | Export-Csv -Path $localPath -NoTypeInformation
  
