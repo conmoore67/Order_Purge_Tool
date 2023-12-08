@@ -163,6 +163,7 @@ $textboxConfirmMoveNumber.Location = New-Object System.Drawing.Point(10, 240)
 $textboxConfirmMoveNumber.Size = New-Object System.Drawing.Size(420, 20)  # Narrowed width
 $form.Controls.Add($textboxConfirmMoveNumber)
 
+
 # Create the Database Selection label and ComboBox
 $labelDatabase = New-Object System.Windows.Forms.Label
 $labelDatabase.Location = New-Object System.Drawing.Point(10, 270)
