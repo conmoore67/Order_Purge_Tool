@@ -1,4 +1,50 @@
 
+#Version Check
+$scriptVersion = '1.0.0'  # Example version format
+$githubVersionUrl = 'https://github.com/conmoore67/Order_Purge_Tool/blob/main/Order_Purge_Tool.ps1'  
+$latestVersion = Invoke-RestMethod -Uri $githubVersionUrl
+function Compare-Version($version1, $version2) {
+    $v1 = New-Object -TypeName System.Version -ArgumentList $version1
+    $v2 = New-Object -TypeName System.Version -ArgumentList $version2
+    return $v1.CompareTo($v2)
+}
+
+$isUpdateRequired = Compare-Version -version1 $scriptVersion -version2 $latestVersion -lt 0
+
+if ($isUpdateRequired) {
+    $newScriptUrl = 'https://raw.githubusercontent.com/username/repository/branch/YourScript.ps1'  # Replace with actual URL
+    $newScriptPath = $MyInvocation.MyCommand.Path  # Gets the path of the running script
+
+    Invoke-WebRequest -Uri $newScriptUrl -OutFile $newScriptPath
+
+    Write-Host "Script updated to latest version. Please rerun the script."
+    exit
+} else {
+    # Notify the user that the application is up to date
+    Add-Type -AssemblyName System.Windows.Forms
+
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = 'Application Up to Date'
+    $form.Size = New-Object System.Drawing.Size(300, 150)
+    $form.StartPosition = 'CenterScreen'
+
+    $label = New-Object System.Windows.Forms.Label
+    $label.Location = New-Object System.Drawing.Point(10, 10)
+    $label.Size = New-Object System.Drawing.Size(280, 80)
+    $label.Text = "The application is already at the most current version ($scriptVersion)."
+    $form.Controls.Add($label)
+
+    $okButton = New-Object System.Windows.Forms.Button
+    $okButton.Location = New-Object System.Drawing.Point(100, 100)
+    $okButton.Size = New-Object System.Drawing.Size(100, 23)
+    $okButton.Text = 'OK'
+    $okButton.Add_Click({ $form.Close() })
+    $form.Controls.Add($okButton)
+
+    $form.ShowDialog()
+}
+
+
 ########## Check/Install/Import needed modules ##########
 # Load necessary assembly for Windows Forms
 Add-Type -AssemblyName System.Windows.Forms
