@@ -1,48 +1,85 @@
 
 ########## Verrify Script Version ##########
-#Version Check
-$scriptVersion = '1.1.0'  
-$githubVersionUrl = 'https://github.com/conmoore67/Order_Purge_Tool/blob/main/Order_Purge_Tool.ps1'  
-$latestVersion = Invoke-RestMethod -Uri $githubVersionUrl
-function Compare-Version($version1, $version2) {
-    $v1 = New-Object -TypeName System.Version -ArgumentList $version1
-    $v2 = New-Object -TypeName System.Version -ArgumentList $version2
-    return $v1.CompareTo($v2)
+# Add Windows Forms reference
+Add-Type -AssemblyName System.Windows.Forms
+
+# Current script version
+$localVersion = '1.0.0'  # Example version format
+
+# GitHub URL for the raw script
+$githubUrl = 'https://raw.githubusercontent.com/conmoore67/Order_Purge_Tool/5d6e0b3e70dafd6650221a7f88068d77c8a8b6f6/Order_Purge_Tool.ps1'
+
+# Function to extract version number from script content
+function Get-ScriptVersion($scriptContent) {
+    $versionLine = $scriptContent -match "\$version = '(\d+\.\d+\.\d+)'" | Out-Null
+    $scriptVersion = $matches[1]
+    return $scriptVersion
 }
 
-$isUpdateRequired = Compare-Version -version1 $scriptVersion -version2 $latestVersion -lt 0
+# Get the latest script content from GitHub
+$latestScriptContent = Invoke-RestMethod -Uri $githubUrl
 
-if ($isUpdateRequired) {
-    $newScriptUrl = 'https://raw.githubusercontent.com/username/repository/branch/YourScript.ps1'  # Replace with actual URL
-    $newScriptPath = $MyInvocation.MyCommand.Path  # Gets the path of the running script
+# Extract version from the latest script
+$latestVersion = Get-ScriptVersion -scriptContent $latestScriptContent
 
-    Invoke-WebRequest -Uri $newScriptUrl -OutFile $newScriptPath
+# Function to create OK button
+function CreateOkButton($form) {
+    $okButton = New-Object System.Windows.Forms.Button
+    $okButton.Text = 'OK'
+    $okButton.Size = New-Object System.Drawing.Size(75, 23)
+    $okButton.Location = New-Object System.Drawing.Point(100, 100)
+    $okButton.DialogResult = [System.Windows.Forms.DialogResult]::OK
+    $form.AcceptButton = $okButton
+    $form.Controls.Add($okButton)
+}
 
-    Write-Host "Script updated to latest version. Please rerun the script."
+# Compare versions and show message in a form
+if ([version]$localVersion -lt [version]$latestVersion) {
+    # Create and configure the form for the update message
+    $formUpdate = New-Object System.Windows.Forms.Form
+    $formUpdate.Text = "Update Available"
+    $formUpdate.Size = New-Object System.Drawing.Size(300, 200)
+    $formUpdate.StartPosition = 'CenterScreen'
+
+    # Create the label for the update message
+    $labelUpdate = New-Object System.Windows.Forms.Label
+    $labelUpdate.Location = New-Object System.Drawing.Point(10, 10)
+    $labelUpdate.Size = New-Object System.Drawing.Size(280, 80)
+    $labelUpdate.Text = "A newer version ($latestVersion) is available. Updating..."
+    $formUpdate.Controls.Add($labelUpdate)
+
+    # Create OK button
+    CreateOkButton -form $formUpdate
+
+    # Show the form as a dialog
+    $formUpdate.ShowDialog()
+
+    # Download and save the new script
+    $newScriptPath = "C:\temp\Order_Purge_Tool.ps1"  # Specify the path for the new script
+    Invoke-WebRequest -Uri $githubUrl -OutFile $newScriptPath
+
+    # Execute the new script
+    Start-Process $newScriptPath
     exit
 } else {
-    # Notify the user that the application is up to date
-    Add-Type -AssemblyName System.Windows.Forms
+    # Create and configure the form for the "latest version" message
+    $formLatest = New-Object System.Windows.Forms.Form
+    $formLatest.Text = "Latest Version"
+    $formLatest.Size = New-Object System.Drawing.Size(300, 200)
+    $formLatest.StartPosition = 'CenterScreen'
 
-    $form = New-Object System.Windows.Forms.Form
-    $form.Text = 'Application Up to Date'
-    $form.Size = New-Object System.Drawing.Size(300, 150)
-    $form.StartPosition = 'CenterScreen'
+    # Create the label for the "latest version" message
+    $labelLatest = New-Object System.Windows.Forms.Label
+    $labelLatest.Location = New-Object System.Drawing.Point(10, 10)
+    $labelLatest.Size = New-Object System.Drawing.Size(280, 80)
+    $labelLatest.Text = "You're running the latest version ($localVersion)."
+    $formLatest.Controls.Add($labelLatest)
 
-    $label = New-Object System.Windows.Forms.Label
-    $label.Location = New-Object System.Drawing.Point(10, 10)
-    $label.Size = New-Object System.Drawing.Size(280, 80)
-    $label.Text = "The application is already at the most current version ($scriptVersion)."
-    $form.Controls.Add($label)
+    # Create OK button
+    CreateOkButton -form $formLatest
 
-    $okButton = New-Object System.Windows.Forms.Button
-    $okButton.Location = New-Object System.Drawing.Point(100, 100)
-    $okButton.Size = New-Object System.Drawing.Size(100, 23)
-    $okButton.Text = 'OK'
-    $okButton.Add_Click({ $form.Close() })
-    $form.Controls.Add($okButton)
-
-    $form.ShowDialog()
+    # Show the form as a dialog
+    $formLatest.ShowDialog()
 }
 
 
