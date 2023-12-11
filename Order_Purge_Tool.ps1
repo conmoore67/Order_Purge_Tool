@@ -4,7 +4,7 @@
 Add-Type -AssemblyName System.Windows.Forms
 
 # Current script version
-$localVersion = '1.0.0'  # Example version format
+$localVersion = '1.3.0'  # Example version format
 
 # GitHub URL for the raw script
 $githubUrl = 'https://raw.githubusercontent.com/conmoore67/Order_Purge_Tool/5d6e0b3e70dafd6650221a7f88068d77c8a8b6f6/Order_Purge_Tool.ps1'
