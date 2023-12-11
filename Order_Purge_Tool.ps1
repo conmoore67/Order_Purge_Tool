@@ -1,48 +1,48 @@
-#
-##Version Check
-#$scriptVersion = '1.0.0'  # Example version format
-#$githubVersionUrl = 'https://github.com/conmoore67/Order_Purge_Tool/blob/main/Order_Purge_Tool.ps1'  
-#$latestVersion = Invoke-RestMethod -Uri $githubVersionUrl
-#function Compare-Version($version1, $version2) {
-#    $v1 = New-Object -TypeName System.Version -ArgumentList $version1
-#    $v2 = New-Object -TypeName System.Version -ArgumentList $version2
-#    return $v1.CompareTo($v2)
-#}
-#
-#$isUpdateRequired = Compare-Version -version1 $scriptVersion -version2 $latestVersion -lt 0
-#
-#if ($isUpdateRequired) {
-#    $newScriptUrl = 'https://raw.githubusercontent.com/username/repository/branch/YourScript.ps1'  # Replace with actual URL
-#    $newScriptPath = $MyInvocation.MyCommand.Path  # Gets the path of the running script
-#
-#    Invoke-WebRequest -Uri $newScriptUrl -OutFile $newScriptPath
-#
-#    Write-Host "Script updated to latest version. Please rerun the script."
-#    exit
-#} else {
-#    # Notify the user that the application is up to date
-#    Add-Type -AssemblyName System.Windows.Forms
-#
-#    $form = New-Object System.Windows.Forms.Form
-#    $form.Text = 'Application Up to Date'
-#    $form.Size = New-Object System.Drawing.Size(300, 150)
-#    $form.StartPosition = 'CenterScreen'
-#
-#    $label = New-Object System.Windows.Forms.Label
-#    $label.Location = New-Object System.Drawing.Point(10, 10)
-#    $label.Size = New-Object System.Drawing.Size(280, 80)
-#    $label.Text = "The application is already at the most current version ($scriptVersion)."
-#    $form.Controls.Add($label)
-#
-#    $okButton = New-Object System.Windows.Forms.Button
-#    $okButton.Location = New-Object System.Drawing.Point(100, 100)
-#    $okButton.Size = New-Object System.Drawing.Size(100, 23)
-#    $okButton.Text = 'OK'
-#    $okButton.Add_Click({ $form.Close() })
-#    $form.Controls.Add($okButton)
-#
-#    $form.ShowDialog()
-#}
+
+#Version Check
+$scriptVersion = '1.2.0'  # Example version format
+$githubVersionUrl = 'https://github.com/conmoore67/Order_Purge_Tool/blob/main/Order_Purge_Tool.ps1'  
+$latestVersion = Invoke-RestMethod -Uri $githubVersionUrl
+function Compare-Version($version1, $version2) {
+    $v1 = New-Object -TypeName System.Version -ArgumentList $version1
+    $v2 = New-Object -TypeName System.Version -ArgumentList $version2
+    return $v1.CompareTo($v2)
+}
+
+$isUpdateRequired = Compare-Version -version1 $scriptVersion -version2 $latestVersion -lt 0
+
+if ($isUpdateRequired) {
+    $newScriptUrl = 'https://raw.githubusercontent.com/username/repository/branch/YourScript.ps1'  # Replace with actual URL
+    $newScriptPath = $MyInvocation.MyCommand.Path  # Gets the path of the running script
+
+    Invoke-WebRequest -Uri $newScriptUrl -OutFile $newScriptPath
+
+    Write-Host "Script updated to latest version. Please rerun the script."
+    exit
+} else {
+    # Notify the user that the application is up to date
+    Add-Type -AssemblyName System.Windows.Forms
+
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = 'Application Up to Date'
+    $form.Size = New-Object System.Drawing.Size(300, 150)
+    $form.StartPosition = 'CenterScreen'
+
+    $label = New-Object System.Windows.Forms.Label
+    $label.Location = New-Object System.Drawing.Point(10, 10)
+    $label.Size = New-Object System.Drawing.Size(280, 80)
+    $label.Text = "The application is already at the most current version ($scriptVersion)."
+    $form.Controls.Add($label)
+
+    $okButton = New-Object System.Windows.Forms.Button
+    $okButton.Location = New-Object System.Drawing.Point(100, 100)
+    $okButton.Size = New-Object System.Drawing.Size(100, 23)
+    $okButton.Text = 'OK'
+    $okButton.Add_Click({ $form.Close() })
+    $form.Controls.Add($okButton)
+
+    $form.ShowDialog()
+}
 
 
 ########## Check/Install/Import needed modules ##########
@@ -342,38 +342,38 @@ if ($fileUploaded) {
 
 } else {
     # Add Windows Forms reference
-Add-Type -AssemblyName System.Windows.Forms
-
-# Create and configure the form for the message box
-$formError = New-Object System.Windows.Forms.Form
-$formError.Text = "Error!!"
-$formError.Size = New-Object System.Drawing.Size(400, 250)  # Adjust the size as needed
-$formError.StartPosition = 'CenterScreen'
-
-# Create the bold label for the "Backup Unsuccessful!!" message
-$labelBoldError = New-Object System.Windows.Forms.Label
-$labelBoldError.Location = New-Object System.Drawing.Point(10, 10)
-$labelBoldError.Size = New-Object System.Drawing.Size(380, 30)  # Adjust the size as needed
-$labelBoldError.Text = "Backup Unsuccessful!!"
-$labelBoldError.Font = New-Object System.Drawing.Font("Arial", 12, [System.Drawing.FontStyle]::Bold)
-$formError.Controls.Add($labelBoldError)
-
-# Create the standard label for the description
-$labelDescription = New-Object System.Windows.Forms.Label
-$labelDescription.Location = New-Object System.Drawing.Point(10, 50)
-$labelDescription.Size = New-Object System.Drawing.Size(380, 120)  # Adjust the size as needed
-$labelDescription.Text = "Data purge halted to prevent the loss of order files. Please run the script with your Admin account and enter your credentials on the SharePoint screen. Should this issue persist, clear your cached credentials and try the order purge process again."
-$labelDescription.Font = New-Object System.Drawing.Font("Arial", 10)
-$formError.Controls.Add($labelDescription)
-
-# Create an OK button for the user to close the message box
-$okButton = New-Object System.Windows.Forms.Button
-$okButton.Location = New-Object System.Drawing.Point(150, 180)  # Adjusted position
-$okButton.Size = New-Object System.Drawing.Size(100, 23)
-$okButton.Text = "OK"
-$okButton.Add_Click({$formError.Close()})
-$formError.Controls.Add($okButton)
-
-# Show the form as a dialog
-$formError.ShowDialog()
+    Add-Type -AssemblyName System.Windows.Forms
+    
+    # Create and configure the form for the message box
+    $formError = New-Object System.Windows.Forms.Form
+    $formError.Text = "Error!!"
+    $formError.Size = New-Object System.Drawing.Size(400, 250)  # Adjust the size as needed
+    $formError.StartPosition = 'CenterScreen'
+    
+    # Create the bold label for the "Backup Unsuccessful!!" message
+    $labelBoldError = New-Object System.Windows.Forms.Label
+    $labelBoldError.Location = New-Object System.Drawing.Point(10, 10)
+    $labelBoldError.Size = New-Object System.Drawing.Size(380, 30)  # Adjust the size as needed
+    $labelBoldError.Text = "Backup Unsuccessful!!"
+    $labelBoldError.Font = New-Object System.Drawing.Font("Arial", 12, [System.Drawing.FontStyle]::Bold)
+    $formError.Controls.Add($labelBoldError)
+    
+    # Create the standard label for the description
+    $labelDescription = New-Object System.Windows.Forms.Label
+    $labelDescription.Location = New-Object System.Drawing.Point(10, 50)
+    $labelDescription.Size = New-Object System.Drawing.Size(380, 120)  # Adjust the size as needed
+    $labelDescription.Text = "Data purge halted to prevent the loss of order files. Please run the script with your Admin account and enter your credentials on the SharePoint screen. Should this issue persist, clear your cached credentials and try the order purge process again."
+    $labelDescription.Font = New-Object System.Drawing.Font("Arial", 10)
+    $formError.Controls.Add($labelDescription)
+    
+    # Create an OK button for the user to close the message box
+    $okButton = New-Object System.Windows.Forms.Button
+    $okButton.Location = New-Object System.Drawing.Point(150, 180)  # Adjusted position
+    $okButton.Size = New-Object System.Drawing.Size(100, 23)
+    $okButton.Text = "OK"
+    $okButton.Add_Click({$formError.Close()})
+    $formError.Controls.Add($okButton)
+    
+    # Show the form as a dialog
+    $formError.ShowDialog()
 }
