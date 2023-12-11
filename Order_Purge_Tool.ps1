@@ -1,6 +1,7 @@
 
+########## Verrify Script Version ##########
 #Version Check
-$scriptVersion = '1.0.0'  # Example version format
+$scriptVersion = '1.1.0'  
 $githubVersionUrl = 'https://github.com/conmoore67/Order_Purge_Tool/blob/main/Order_Purge_Tool.ps1'  
 $latestVersion = Invoke-RestMethod -Uri $githubVersionUrl
 function Compare-Version($version1, $version2) {
